@@ -1,6 +1,6 @@
 <?php
 //// Embed Properties ////
-$secretCode = "rjXPZulsQkMxNH01jtMLC0Nomqs359yx"; // Use your SecretCode here 
+$secretCode = "Enter your embed secret"; // Use your SecretCode here 
 $userEmail = "soundarya.manimeharan@syncfusion.com"; // Email address of the user
 $serverTimeStamp=time();
 $data = json_decode(file_get_contents('php://input'), true);
