@@ -1,7 +1,7 @@
 <?php
 //// Embed Properties ////
-$secretCode = "UUL2TPvYK1hA96uazfS0Erup9FphiP9v"; // Use your SecretCode here 
-$userEmail = "anuabarna.b@syncfusion.com"; // Email address of the user
+$secretCode = "Enter your embed secret"; // Use your SecretCode here 
+$userEmail = "demo@gmail.com"; // Email address of the user
 $serverTimeStamp=time();
 $data = json_decode(file_get_contents('php://input'), true);
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -29,7 +29,7 @@ if ($data != null && $data["embedQuerString"] !="" && $data["dashboardServerApiU
 function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
   global $userEmail;
   global $serverTimeStamp;
-  $embedQuerString = $embedQuerString . "&embed_user_email=" . $userEmail. "&embed_datasource_filter=[{&&StoreName=Trousers','Jackets}]";
+  $embedQuerString = $embedQuerString . "&embed_user_email=" . $userEmail;
   $embedQuerString = $embedQuerString . "&embed_server_timestamp=" . $serverTimeStamp;
   $embedSignature = "&embed_signature=" . getSignatureUrl($embedQuerString);
   $embedDetailsUrl = "/embed/authorize?" . $embedQuerString . $embedSignature;
@@ -44,6 +44,9 @@ function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
       "Content-Type: application/json"
     ),
   ));
+  curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+  curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
   $response = curl_exec($curl);
   $err = curl_error($curl);
   curl_close($curl);
