@@ -1,7 +1,7 @@
 <?php
 //// Embed Properties ////
 $secretCode = "Enter your embed secret"; // Use your SecretCode here 
-$userEmail = "soundarya.manimeharan@syncfusion.com"; // Email address of the user
+$userEmail = "demo@gmail.com"; // Email address of the user
 $serverTimeStamp=time();
 $data = json_decode(file_get_contents('php://input'), true);
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -29,12 +29,10 @@ if ($data != null && $data["embedQuerString"] !="" && $data["dashboardServerApiU
 function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
   global $userEmail;
   global $serverTimeStamp;
-  $embedQuerString = $embedQuerString . "&embed_user_email=" . $userEmail. "&embed_datasource_filter=[{&&StoreName=Trousers','Jackets}]";
+  $embedQuerString = $embedQuerString . "&embed_user_email=" . $userEmail;
   $embedQuerString = $embedQuerString . "&embed_server_timestamp=" . $serverTimeStamp;
   $embedSignature = "&embed_signature=" . getSignatureUrl($embedQuerString);
-//echo $embedSignature;
   $embedDetailsUrl = "/embed/authorize?" . $embedQuerString . $embedSignature;
-	//echo   $dashboardServerApiUrl . $embedDetailsUrl;
   $curl = curl_init();
   curl_setopt_array($curl, array(
     CURLOPT_URL => $dashboardServerApiUrl . $embedDetailsUrl,
@@ -46,6 +44,9 @@ function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
       "Content-Type: application/json"
     ),
   ));
+  curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+  curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
   $response = curl_exec($curl);
   $err = curl_error($curl);
   curl_close($curl);
@@ -56,8 +57,8 @@ function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
 //// Prepare embed_Signature by encrypting with secretCode ////
 function getSignatureUrl($embedQuerString) {
   global $secretCode; 
-  $keyBytes = utf8_encode($secretCode);            
-  $messageBytes = utf8_encode($embedQuerString);
+  $keyBytes = mb_convert_encoding($secretCode, 'UTF-8');
+  $messageBytes = mb_convert_encoding($embedQuerString, 'UTF-8');
   $hashMessage = hash_hmac('sha256',$messageBytes, $keyBytes, true);
   $signature = base64_encode($hashMessage);
   return $signature;
