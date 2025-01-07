@@ -1,33 +1,52 @@
-
 <?php
-// ServerURL, DashboardPath and AuthorizeSeverURL to embed widget 
-$serverUrl = "http://localhost:53623/bi/site/site1";
-$dashboardId ="42d69d1a-dcd8-41b0-93a4-d4cdd2c53241";
-$authorizeServerUrl = "http://localhost:3000/rest/authorizeserver.php";
+$apiHost = "http://localhost:3000";
+$authorizeServerUrl = $apiHost . "/rest/authorizeserver.php";
+$getDataUrl = $apiHost . "/rest/getData.php";
 ?>
 
 <html>
+
 <head>
-<script type="text/javascript" src="https://cdn.boldbi.com/embedded-sdk/latest/boldbi-embed.js"></script>
+    <script type="text/javascript" src="https://cdn.boldbi.com/embedded-sdk/latest/boldbi-embed.js"></script>
 </head>
-<body onload="embedSample();">
-<div id="dashboard"></div>
+
+<body onload="Init();">
+    <div id="dashboard"></div>
     <script>
-        function embedSample() {
-            var dashboardemb = BoldBI.create({
-                serverUrl: '<?php echo $serverUrl;?>',
-                dashboardId: '<?php echo $dashboardId;?>',
-                embedContainerId: "dashboard",// This should be the container id where you want to embed the dashboard
-                embedType: BoldBI.EmbedType.Component,
-                environment: BoldBI.Environment.Enterprise,
-                height: "700px",
-                width: "1500px",
+        async function Init() {
+            try {
+                // Fetch data from the PHP backend
+                const response = await fetch('<?php echo $getDataUrl; ?>');
+                console.log("Response ", response);
+                // Check if the response is okay
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                // Parse the JSON data
+                const data = await response.json();
+                // Call the function to render the dashboard with the fetched data
+                renderDashboard(data);
+            } catch (error) {
+                console.error("Error fetching the embed configuration:", error);
+            }
+        }
+
+        function renderDashboard(data) {
+            this.dashboard = BoldBI.create({
+                serverUrl: data.ServerUrl + "/" + data.SiteIdentifier,
+                dashboardId: data.DashboardId,
+                embedContainerId: "dashboard",
+                width: "100%",
+                height: window.innerHeight + 'px',
                 authorizationServer: {
-                    url: '<?php echo $authorizeServerUrl;?>'
+                    url: '<?php echo $authorizeServerUrl; ?>'
                 }
             });
-            dashboardemb.loadDashboard();
+
+            this.dashboard.loadDashboard();
         }
     </script>
 </body>
+
 </html>
