@@ -15,28 +15,31 @@ The samples require the following requirements to run.
 
 * [PHP installer](https://windows.php.net/download/)
 * [Visual Studio Code](https://code.visualstudio.com/download)
-* In Visual studio code download the extensions, PHP intelephense and PHP Server.
+> **NOTE:** In Visual studio code download the extensions, PHP intelephense and PHP Server.
 
-## Using the PHP sample
+## Configuration
 
-* Open the PHP sample's file `index.php` in Visual studio code or any IDE which supports PHP.
+* Please ensure you have enabled embed authentication on the `embed settings` page. If it is not currently enabled, please refer to the following image or detailed [instructions](https://help.boldbi.com/site-administration/embed-settings/#get-embed-secret-code) to enable it.
 
-* Please change the following properties in the `index.php` file as per your Bold BI Server.
+    ![Embed Settings](https://github.com/boldbi/aspnet-core-sample/assets/91586758/b3a81978-9eb4-42b2-92bb-d1e2735ab007)
 
-| **Parameter**         | **Description**                                                                                                                                                             |
-|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **serverUrl**         | Dashboard Server BI URL. For Enterprise Edition it should be like - `http://localhost:5000/bi/site/site1` and for Cloud it should be like - `http://dashboard.syncfusion.com/bi`. |
-| **dashboardId**       | Dashboard Id of the dashboard you want to embed here.                                                                                                                        |
-| **authorizeServerUrl**| URL pointing to AuthorizeServer API. We have a running PHP sample on port 8080. Ex: `http://localhost:8080/rest/authorizeserver.php`.                                         |
+* To download the `embedConfig.json` file, please follow this [link](https://help.boldbi.com/site-administration/embed-settings/#get-embed-configuration-file) for reference. Additionally, you can refer to the following image for visual guidance.
 
-* Open the `authorizeserver.php` file and provide the value for below described properties as per your Bold BI server.
+    ![Embed Settings Download](https://github.com/boldbi/aspnet-core-sample/assets/91586758/d27d4cfc-6a3e-4c34-975e-f5f22dea6172)
 
-| **Parameter** | **Description** |
-|---------------|-----------------|
-| **secretCode** | Get your EmbedSecret key from the Embed tab by enabling the `Enable embed authentication` on the [Administration page](https://help.boldbi.com/embedded-bi/site-administration/embed-settings/?utm_source=github&utm_medium=backlinks). |
-| **userEmail**  | UserEmail of the Admin in your Bold BI, which would be used to get the dashboard list. |
+    ![EmbedConfig Properties](https://github.com/boldbi/aspnet-core-sample/assets/91586758/d6ce925a-0d4c-45d2-817e-24d6d59e0d63)
 
-* Now run the PHP sample to render the particular dashboard.
+* Copy the downloaded `embedConfig.json` file and paste it into the designated [location](https://github.com/boldbi/php-sample/tree/master/rest) within the application. Please ensure you have placed it in the application, as shown in the following image.
+
+    ![EmbedConfig image](https://github.com/boldbi/aspnet-core-sample/assets/91586758/95e8e272-53e8-449a-8a46-592cf8646d7c)
+
+## Run a PHP Sample
+ 
+ * Open the PHP sample in visual studio code or any respective IDE.
+ 
+ * Ensure whether embedConfig file is located in following location, `rest/embedConfig.json` and run the PHP application using the respective IDE or using visual studio code.
+
+ * Right-click the `index.php` file and select `PHP Server: Server project`.
 
 Please refer to the [help documentation](https://help.boldbi.com/embedded-bi/javascript-based/samples/v3.3.40-or-later/php-with-javascript/#how-to-run-the-sample?utm_source=github&utm_medium=backlinks) to know how to run the sample.
 
