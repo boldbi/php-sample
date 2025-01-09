@@ -16,8 +16,7 @@ $getDataUrl = $apiHost . "/rest/getData.php";
         async function Init() {
             try {
                 // Fetch data from the PHP backend
-                const response = await fetch('<?php echo $getDataUrl; ?>');
-                console.log("Response ", response);
+                const response = await fetch('<?php echo $getDataUrl;?>');
                 // Check if the response is okay
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
@@ -40,7 +39,7 @@ $getDataUrl = $apiHost . "/rest/getData.php";
                 width: "100%",
                 height: window.innerHeight + 'px',
                 authorizationServer: {
-                    url: '<?php echo $authorizeServerUrl; ?>'
+                    url: '<?php echo $authorizeServerUrl;?>'
                 }
             });
 
