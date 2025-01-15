@@ -1,9 +1,19 @@
 <?php
-//// Embed Properties ////
-$secretCode = "Enter your embed secret"; // Use your SecretCode here 
-$userEmail = "demo@gmail.com"; // Email address of the user
+$jsonData = file_get_contents('embedConfig.json');
+
+if ($jsonData === false) {
+    echo 'Error: embedConfig.json file not found.';
+    exit(1); // Exit the program with a non-zero exit code to indicate an error
+}
+
+$appConfig = json_decode($jsonData, true);
+
+$secretCode = $appConfig['EmbedSecret'];
+$userEmail = $appConfig['UserEmail'];
+
 $serverTimeStamp=time();
 $data = json_decode(file_get_contents('php://input'), true);
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   header('Access-Control-Allow-Origin: *');
   header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
@@ -16,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
+
 // Getting embedQuerString and dashboardServerApiUrl from BoldBI wrapper 
 if ($data != null && $data["embedQuerString"] !="" && $data["dashboardServerApiUrl"]!="") {
   $embedQuerString = $data["embedQuerString"];
@@ -23,7 +34,7 @@ if ($data != null && $data["embedQuerString"] !="" && $data["dashboardServerApiU
   $dashdetails = GetEmbedDetails($embedQuerString, $dashboardServerApiUrl);
   header('Content-type: application/json');
   echo json_encode($dashdetails);
- }
+}
  
 // This function used to get dashboard details from Bold BI Server 
 function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
@@ -33,6 +44,7 @@ function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
   $embedQuerString = $embedQuerString . "&embed_server_timestamp=" . $serverTimeStamp;
   $embedSignature = "&embed_signature=" . getSignatureUrl($embedQuerString);
   $embedDetailsUrl = "/embed/authorize?" . $embedQuerString . $embedSignature;
+
   $curl = curl_init();
   curl_setopt_array($curl, array(
     CURLOPT_URL => $dashboardServerApiUrl . $embedDetailsUrl,
@@ -50,11 +62,10 @@ function GetEmbedDetails($embedQuerString, $dashboardServerApiUrl){
   $response = curl_exec($curl);
   $err = curl_error($curl);
   curl_close($curl);
-
   return $response;
 }
 
-//// Prepare embed_Signature by encrypting with secretCode ////
+// Prepare embed_Signature by encrypting with secretCode
 function getSignatureUrl($embedQuerString) {
   global $secretCode; 
   $keyBytes = mb_convert_encoding($secretCode, 'UTF-8');
