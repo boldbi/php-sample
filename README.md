@@ -21,31 +21,30 @@ The samples require the following requirements to run.
 
 * Please ensure you have enabled embed authentication on the `embed settings` page. If it is not currently enabled, please refer to the following image or detailed [instructions](https://help.boldbi.com/site-administration/embed-settings/#get-embed-secret-code) to enable it.
 
-    ![Embed Settings](https://github.com/boldbi/aspnet-core-sample/assets/91586758/b3a81978-9eb4-42b2-92bb-d1e2735ab007)
+    ![Embed Settings](/images/enable-embedsecretkey.png)
 
 * To download the `embedConfig.json` file, please follow this [link](https://help.boldbi.com/site-administration/embed-settings/#get-embed-configuration-file) for reference. Additionally, you can refer to the following image for visual guidance.
 
-    ![Embed Settings Download](https://github.com/boldbi/aspnet-core-sample/assets/91586758/d27d4cfc-6a3e-4c34-975e-f5f22dea6172)
-
-    ![EmbedConfig Properties](https://github.com/boldbi/aspnet-core-sample/assets/91586758/d6ce925a-0d4c-45d2-817e-24d6d59e0d63)
+    ![Embed Settings Download](/images/download-embedsecretkey.png)
+    ![EmbedConfig Properties](/images/embedconfig-file.png)
 
 * Copy the downloaded `embedConfig.json` file and paste it into the designated [location](https://github.com/boldbi/php-sample/tree/master/rest) within the application. Please ensure you have placed it in the application, as shown in the following image.
 
-    ![php-embedconfig](https://github.com/user-attachments/assets/cea9eff5-66d9-438b-8c17-45b2bf706229)
+    ![php-embedconfig](/images/embedconfig-location.png)
 
 ## Run a PHP Sample
  
- * Open the PHP sample in visual studio code or any respective IDE.
+ * Open the PHP sample in Visual Studio Code or any respective IDE.
  
  * Ensure whether embedConfig file is located in following location, `rest/embedConfig.json` and run the PHP application using the respective IDE or using visual studio code.
 
  * Right-click the `index.php` file and select `PHP Server: Serve project`.
 
-   ![image](https://github.com/user-attachments/assets/8dc49ff7-9d07-4f23-a66f-3d8e0ade03f2)
+   ![php server](/images/php-server-run.png)
 
  * After that application has started, it will display a URL in the command line interface, typically something like (e.g., http://localhost:3000/). Copy this URL and paste it into your default web browser.
 
-   ![image](https://github.com/user-attachments/assets/81230102-1fdd-414a-b6e2-d1e5f519b1f1)
+   ![dashboard image](/images/dashboard.png)
    
 Please refer to the [help documentation](https://help.boldbi.com/embedded-bi/javascript-based/samples/v3.3.40-or-later/php-with-javascript/#how-to-run-the-sample?utm_source=github&utm_medium=backlinks) to know how to run the sample.
 
