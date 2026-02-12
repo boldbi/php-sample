@@ -15,12 +15,20 @@ if ($data === false) {
     exit();
 }
 
+// Remove UTF-8 BOM if present (safe byte-level check)
+if (substr($data, 0, 3) === "\xEF\xBB\xBF") {
+    $data = substr($data, 3);
+}
+
 // Parse the JSON data
 $dataArray = json_decode($data, true);
 
 if (json_last_error() !== JSON_ERROR_NONE) {
     http_response_code(500); // Internal Server Error
-    echo json_encode(array("error" => "Could not parse the JSON data."));
+    echo json_encode(array(
+        "error" => "Could not parse the JSON data.",
+        "json_error" => json_last_error_msg()
+    ));
     exit();
 }
 
