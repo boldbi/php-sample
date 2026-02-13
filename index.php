@@ -1,6 +1,6 @@
 <?php
 $apiHost = "http://localhost:3000";
-$authorizeServerUrl = $apiHost . "/rest/authorizeserver.php";
+$tokenGenerationUrl = $apiHost . "/rest/tokengeneration.php";
 $getDataUrl = $apiHost . "/rest/getData.php";
 ?>
 
@@ -16,7 +16,7 @@ $getDataUrl = $apiHost . "/rest/getData.php";
         async function Init() {
             try {
                 // Fetch data from the PHP backend
-                const response = await fetch('<?php echo $getDataUrl;?>');
+                const response = await fetch('<?php echo $getDataUrl; ?>');
                 // Check if the response is okay
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
@@ -31,19 +31,32 @@ $getDataUrl = $apiHost . "/rest/getData.php";
             }
         }
 
-        function renderDashboard(data) {
-            this.dashboard = BoldBI.create({
-                serverUrl: data.ServerUrl + "/" + data.SiteIdentifier,
-                dashboardId: data.DashboardId,
-                embedContainerId: "dashboard",
-                width: "100%",
-                height: window.innerHeight + 'px',
-                authorizationServer: {
-                    url: '<?php echo $authorizeServerUrl;?>'
-                }
-            });
+        function getEmbedToken() {
+            return fetch('<?php echo $tokenGenerationUrl; ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Token fetch failed");
+                    return response.text();
+                });
+        }
 
-            this.dashboard.loadDashboard();
+        function renderDashboard(data) {
+            getEmbedToken().then(accessToken => {
+                var boldbiEmbedInstance = BoldBI.create({
+                    serverUrl: data.ServerUrl + "/" + data.SiteIdentifier,
+                    dashboardId: data.DashboardId,
+                    embedContainerId: "dashboard",
+                    embedToken: accessToken
+                });
+                boldbiEmbedInstance.loadDashboard();
+            }).catch(err => {
+                console.error("Failed to get embed token:", err);
+            });
         }
     </script>
 </body>
